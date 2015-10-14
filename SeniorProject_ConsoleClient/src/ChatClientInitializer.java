@@ -1,5 +1,8 @@
 
+
+
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
@@ -34,7 +37,7 @@ public class ChatClientInitializer extends ChannelInitializer<SocketChannel> {
       @Override
       public void initChannel(SocketChannel ch) {
           ChannelPipeline pipeline = ch.pipeline();
-  
+          ch.config().setOption(ChannelOption.newInstance("User"), "test");
           if (sslCtx != null) {
               pipeline.addLast(sslCtx.newHandler(ch.alloc(), ChatClient.HOST, ChatClient.PORT));
           }
@@ -43,7 +46,6 @@ public class ChatClientInitializer extends ChannelInitializer<SocketChannel> {
           pipeline.addLast(new DelimiterBasedFrameDecoder(8192, Delimiters.lineDelimiter()));
           pipeline.addLast(DECODER);
           pipeline.addLast(ENCODER);
-  
           // and then business logic.
           pipeline.addLast(CLIENT_HANDLER);
       }

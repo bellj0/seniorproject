@@ -1,4 +1,6 @@
 
+
+
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -14,10 +16,11 @@ import io.netty.channel.SimpleChannelInboundHandler;
  * @author Stephen
  */
 @Sharable
-public class ChatClientHandler extends SimpleChannelInboundHandler<String> {
+public class ChatClientHandler extends SimpleChannelInboundHandler<Object> {
 
     @Override
-    protected void messageReceived(ChannelHandlerContext ctx, String msg) {
+    protected void messageReceived(ChannelHandlerContext ctx, Object msg) {
+        
         System.err.println(msg);
     }
 

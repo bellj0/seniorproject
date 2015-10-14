@@ -1,4 +1,6 @@
 
+
+
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -43,7 +45,7 @@ public class ChatClient {
   
               // Start the connection attempt.
               Channel ch = b.connect(HOST, PORT).sync().channel();
-  
+              
               // Read commands from the stdin.
               ChannelFuture lastWriteFuture = null;
               BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
