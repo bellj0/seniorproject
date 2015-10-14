@@ -6,10 +6,9 @@
 package server;
 
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
@@ -23,9 +22,10 @@ import static server.ChatServerHandler.channels;
  * @author Josh & Stephen
  */
 @Sharable
-public class ChatServerHandler extends SimpleChannelInboundHandler<String> {
 
+public class ChatServerHandler extends SimpleChannelInboundHandler<String> {
     static final ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
+    
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         // Send greeting for a new connection.
@@ -39,11 +39,8 @@ public class ChatServerHandler extends SimpleChannelInboundHandler<String> {
     @Override
     public void messageReceived(ChannelHandlerContext ctx, String msg) {
         for (Channel c: channels) {
-            if (c != ctx.channel()) {
-                c.writeAndFlush("[" + ctx.channel().remoteAddress() + "] " + msg + '\n');
-            } else {
-                c.writeAndFlush("[you] " + msg + '\n');
-            }
+            ChannelOption<String> test = ChannelOption.valueOf("User");
+            c.writeAndFlush("["+test+"]"+ msg + '\n');
         }
           // Close the connection after sending 'Have a good day!'
         // if the client has sent 'bye'.

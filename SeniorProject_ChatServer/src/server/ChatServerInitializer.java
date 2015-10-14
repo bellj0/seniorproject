@@ -33,6 +33,7 @@ public class ChatServerInitializer extends ChannelInitializer<SocketChannel> {
 
     @Override
     public void initChannel(SocketChannel ch) throws Exception {
+        
         ChannelPipeline pipeline = ch.pipeline();
 
         if (sslCtx != null) {
