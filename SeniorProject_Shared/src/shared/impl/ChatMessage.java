@@ -5,7 +5,8 @@ import shared.TransferableObject;
 
 /**
  *
- * @author Stephen
+ * @author Stephen Asbury
+ * @author Josh Bell
  */
 public class ChatMessage extends TransferableObject
 {

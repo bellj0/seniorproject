@@ -3,7 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package client.View;
+package client.ui;
+
+import client.network.connections.ConnectionHandler;
+import java.awt.event.WindowEvent;
+import java.util.List;
+import shared.impl.ChatMessage;
 
 /**
  *
@@ -12,11 +17,13 @@ package client.View;
  */
 public class ChatClient extends javax.swing.JFrame {
 
-    public void setup(String server, Integer port, String username) {
+    private String username;
+    public void setup(String username) {
         setLookAndFeel();
         initComponents();
         setLocationRelativeTo(null);
         setVisible(true);
+        this.username = username;
     }
     
     /**
@@ -35,19 +42,28 @@ public class ChatClient extends javax.swing.JFrame {
         sendButton = new javax.swing.JButton();
         userScrollPane = new javax.swing.JScrollPane();
         userList = new javax.swing.JList();
-        mainMenuBar = new javax.swing.JMenuBar();
-        fileMenu = new javax.swing.JMenu();
-        fileExitMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Chat Client");
         setName("chatClient"); // NOI18N
 
+        chatTextArea.setEditable(false);
         chatTextArea.setColumns(20);
         chatTextArea.setRows(5);
         chatScrollPane.setViewportView(chatTextArea);
 
+        messageTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                messageTextFieldKeyPressed(evt);
+            }
+        });
+
         sendButton.setText("Send");
+        sendButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sendButtonActionPerformed(evt);
+            }
+        });
 
         userScrollPane.setViewportView(userList);
 
@@ -72,7 +88,7 @@ public class ChatClient extends javax.swing.JFrame {
             .addGroup(chatPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(chatPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(userScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
+                    .addComponent(userScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 451, Short.MAX_VALUE)
                     .addGroup(chatPanelLayout.createSequentialGroup()
                         .addComponent(chatScrollPane)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -81,20 +97,6 @@ public class ChatClient extends javax.swing.JFrame {
                             .addComponent(sendButton))))
                 .addContainerGap())
         );
-
-        fileMenu.setText("File");
-
-        fileExitMenuItem.setText("Exit");
-        fileExitMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fileExitMenuItemActionPerformed(evt);
-            }
-        });
-        fileMenu.add(fileExitMenuItem);
-
-        mainMenuBar.add(fileMenu);
-
-        setJMenuBar(mainMenuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -110,10 +112,33 @@ public class ChatClient extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void fileExitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileExitMenuItemActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_fileExitMenuItemActionPerformed
+    private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
+        sendMessage();
+    }//GEN-LAST:event_sendButtonActionPerformed
 
+    private void messageTextFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_messageTextFieldKeyPressed
+        //Shortcut enter to send message
+        if(evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER)
+            sendMessage();
+    }//GEN-LAST:event_messageTextFieldKeyPressed
+
+    public void sendMessage() {
+        //Send a ChatMessage object to the server, which will send to all users
+        ConnectionHandler.getConnection().send(new ChatMessage(messageTextField.getText()));
+        //Clear message text field since user just sent that message
+        messageTextField.setText("");
+    }
+    
+    public void appendChatText(String text) {
+        //Add text to chat area for all clients
+        chatTextArea.append(text+"\n");
+    }
+    
+    public void updateUserList(List<String> users) {
+        //Update user list upon user connect/disconnect
+        userList.setListData(users.toArray());
+    }
+    
     public void setLookAndFeel() {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -143,9 +168,6 @@ public class ChatClient extends javax.swing.JFrame {
     private javax.swing.JPanel chatPanel;
     private javax.swing.JScrollPane chatScrollPane;
     private javax.swing.JTextArea chatTextArea;
-    private javax.swing.JMenuItem fileExitMenuItem;
-    private javax.swing.JMenu fileMenu;
-    private javax.swing.JMenuBar mainMenuBar;
     private javax.swing.JTextField messageTextField;
     private javax.swing.JButton sendButton;
     private javax.swing.JList userList;

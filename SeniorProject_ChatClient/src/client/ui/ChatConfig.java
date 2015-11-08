@@ -1,23 +1,24 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package client.View;
+package client.ui;
 
+import client.network.connections.ConnectionHandler;
 import javax.swing.JOptionPane;
+import shared.impl.AuthenticationRequest;
 
 /**
  *
  * @author Stephen Asbury
  * @author Josh Bell
  */
-public class ChatConfig extends javax.swing.JFrame {
+public class ChatConfig extends javax.swing.JFrame implements ServerStatus {
 
+    private static String host;
+    private static Integer port;
     /**
      * Creates new form ChatConfig
      */
-    public void setup() {
+    public void setup(String host, Integer port) {
+        ChatConfig.host = host;
+        ChatConfig.port = port;
         setLookAndFeel();
         initComponents();
         //Center window on screen
@@ -26,6 +27,14 @@ public class ChatConfig extends javax.swing.JFrame {
         setVisible(true);
     }
 
+    public static String getHost() {
+        return host;
+    }
+    
+    public static Integer getPort() {
+        return port;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -35,13 +44,11 @@ public class ChatConfig extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        serverTextField = new javax.swing.JTextField();
-        portTextField = new javax.swing.JTextField();
         usernameTextField = new javax.swing.JTextField();
         serverLabel = new javax.swing.JLabel();
-        portLabel = new javax.swing.JLabel();
         usernameLabel = new javax.swing.JLabel();
         connectButton = new javax.swing.JButton();
+        statusLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Chat Client");
@@ -49,8 +56,6 @@ public class ChatConfig extends javax.swing.JFrame {
         setResizable(false);
 
         serverLabel.setText("Server");
-
-        portLabel.setText("Port");
 
         usernameLabel.setText("Username");
 
@@ -61,6 +66,8 @@ public class ChatConfig extends javax.swing.JFrame {
             }
         });
 
+        statusLabel.setText("Status");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -70,15 +77,14 @@ public class ChatConfig extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(connectButton)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(serverLabel)
-                            .addComponent(portLabel)
-                            .addComponent(usernameLabel))
+                        .addComponent(serverLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(statusLabel)
+                        .addGap(177, 177, 177))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(usernameLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(serverTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
-                            .addComponent(portTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(usernameTextField))))
+                        .addComponent(usernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -86,69 +92,59 @@ public class ChatConfig extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(serverTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(serverLabel))
+                    .addComponent(serverLabel)
+                    .addComponent(statusLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(portTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(portLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(usernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(usernameLabel))
-                .addGap(18, 18, 18)
+                    .addComponent(usernameLabel)
+                    .addComponent(usernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(43, 43, 43)
                 .addComponent(connectButton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void connectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectButtonActionPerformed
-        String server = serverTextField.getText();
-        Integer port;
-        
-        try {
-            port = Integer.parseInt(portTextField.getText());
-        } catch(java.lang.NumberFormatException e) {
-            port = 0;
-        }
-        String username = usernameTextField.getText();
-        
-        if(isValidServer(server) && isValidPort(port) && isValidUsername(username))
-        {
-            if(establishConnection(server, port)) {
-                dispose();
-                new ChatClient().setup(server, port, username);
-            } else {
-                JOptionPane.showMessageDialog(this, "Could not connect to server, please try a different server/port combination.", "Connection Failed", JOptionPane.ERROR_MESSAGE);
-            }
-            
-        }
-        else
-        {
-            if(!isValidServer(server))
-                JOptionPane.showMessageDialog(this, "Please enter a valid server name.", "Invalid Server",JOptionPane.ERROR_MESSAGE);
-            else if(!isValidPort(port))
-                JOptionPane.showMessageDialog(this, "Please enter a valid port between 1-65535.", "Invalid Port", JOptionPane.ERROR_MESSAGE);
-            else
-                JOptionPane.showMessageDialog(this, "Please enter a valid username.", "Invalid Username", JOptionPane.ERROR_MESSAGE);
-        }
+        requestLogin();
     }//GEN-LAST:event_connectButtonActionPerformed
-   
-    private Boolean establishConnection(String server, Integer port) {
-        return true;
+
+    private void requestLogin() {
+        if (!isValidUsername(getUsername()))
+                JOptionPane.showMessageDialog(this, "Username cannot be null.", "Chat Client", JOptionPane.WARNING_MESSAGE);
+        else {
+            toggleCredentials(false);
+            ConnectionHandler.getConnection().send(new AuthenticationRequest(getUsername()));
+        }
     }
     
-    private Boolean isValidServer(String server) {
+    public void login(String response) {
+		if (response != null) {
+			JOptionPane.showMessageDialog(this, response, "Chat Client", JOptionPane.WARNING_MESSAGE);
+                        toggleCredentials(true);
+		} else {
+                    ChatClient client = new ChatClient();
+                    client.setup(getUsername());
+                    FrameHandler.launchFrame(client);
+                    dispose();
+                }
+	}
+    
+    private void toggleCredentials(boolean enabled) {
+		usernameTextField.setEnabled(enabled);
+		connectButton.setEnabled(enabled);
+	}
+    
+    public static Boolean isValidServer(String server) {
         return !server.isEmpty();
     }
     
-    private Boolean isValidPort(Integer port) {
+    public static Boolean isValidPort(Integer port) {
         return port > 0 && port < 65536;
     }
     
-    private Boolean isValidUsername(String username) {
+    public static Boolean isValidUsername(String username) {
         return !username.isEmpty();
     }
     
@@ -176,14 +172,22 @@ public class ChatConfig extends javax.swing.JFrame {
         }
         //</editor-fold>
     }
+    
+    private String getUsername() {
+        return usernameTextField.getText();
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton connectButton;
-    private javax.swing.JLabel portLabel;
-    private javax.swing.JTextField portTextField;
     private javax.swing.JLabel serverLabel;
-    private javax.swing.JTextField serverTextField;
+    private javax.swing.JLabel statusLabel;
     private javax.swing.JLabel usernameLabel;
     private javax.swing.JTextField usernameTextField;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void handleServerStatus(boolean online) {
+        statusLabel.setText(online ? "Online" : "Offline");
+        toggleCredentials(online);
+    }
 }

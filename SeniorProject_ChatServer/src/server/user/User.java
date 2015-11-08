@@ -40,6 +40,7 @@ public class User {
      */
     public void logout() {
         UserRepository.getUsers().remove(this);
+        UserRepository.updateUserList();
         connection.dispose();
     }
 

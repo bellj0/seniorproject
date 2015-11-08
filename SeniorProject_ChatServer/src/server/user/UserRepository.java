@@ -1,17 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package server.user;
 
 import java.util.LinkedList;
 import java.util.List;
 import shared.impl.ChatMessage;
+import shared.impl.UserList;
 
 /**
  *
- * @author Joshua
+ * @author Stephen Asbury
+ * @author Josh Bell
  */
 public class UserRepository {
 
@@ -44,6 +41,16 @@ public class UserRepository {
      */
     public static void message(User sender, User user, String message) {
         user.getConnection().send(new ChatMessage((sender == null ? "" : (sender.toString() + ": ")) + message));
+    }
+    
+    public static void updateUserList() {
+        List<String> userList = new LinkedList<>();
+        for(User user : users) {
+            userList.add(user.toString());
+        }
+        for(User user : users) {
+            user.getConnection().send(new UserList(userList));
+        }
     }
 
     /**

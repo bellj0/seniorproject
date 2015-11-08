@@ -8,8 +8,8 @@ import shared.impl.AuthenticationRequest;
 import shared.impl.AuthenticationResponse;
 
 /**
- *
- * @author Joshua
+ * @author Stephen Asbury
+ * @author Josh Bell
  *
  * @info Handles a login request.
  *
@@ -37,7 +37,8 @@ public class LoginHandler {
         }
         UserRepository.getUsers().add(user);
         connection.send(new AuthenticationResponse(null));
-        UserRepository.message(null, user, "Welcome to the RQ Chat Client, " + user.toString() + ".");
+        UserRepository.updateUserList();
+        UserRepository.message(null, user, "Welcome to the Chat Client, " + user.toString() + ".");
         return user;
     }
 

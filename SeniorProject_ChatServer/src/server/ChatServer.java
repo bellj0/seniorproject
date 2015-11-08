@@ -21,12 +21,18 @@ public class ChatServer {
         Integer port = -1;
         System.out.println("Please enter a port number: ");
 
-        try {
-            port = Integer.parseInt(sc.nextLine());
-        } catch (Exception e) {
-            e.printStackTrace();
+        while(port < 0 || port > 65535)
+        {
+            try {
+                port = Integer.parseInt(sc.nextLine());
+            } catch (Exception e) {
+                
+            }
+            if(port > 65535 || port < 0)
+            {
+                System.out.println("Please enter a port between 1-65535: ");
+            }
         }
-
         new NetworkServer().connect(port);
 
        

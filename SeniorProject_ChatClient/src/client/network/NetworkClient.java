@@ -29,6 +29,7 @@ public class NetworkClient implements Runnable
     @Override
     public void run()
     {
+        //Netty main setup to init channel
         EventLoopGroup group = new NioEventLoopGroup();
 	    
         try {
@@ -40,7 +41,7 @@ public class NetworkClient implements Runnable
                             socketChannel.pipeline().addLast(
                                             new ObjectEncoder(),
                                             new ObjectDecoder(ClassResolvers.cacheDisabled(null)),
-                                            new ClientChannelHandler());
+                                            new ClientChannelHandler()); //Add object encoder/decoder for POJO's, and the ClientChannelHandler
                     }
             });
             bootstrap.connect(host, port).sync().channel().closeFuture().sync();
