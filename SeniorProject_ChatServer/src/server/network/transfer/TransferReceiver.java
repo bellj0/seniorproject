@@ -8,19 +8,15 @@ import shared.impl.ChatMessage;
 /**
  *
  * @author Joshua
- *
- * @info Handles server sided transfers after a successful connection has been
- * made.
+ * 
+ * Handles server-side transfers after a successful connection has been
+ * made by a user.
  *
  */
 public class TransferReceiver {
 
     /**
-     * Handles any received transferable for a player.
-     *
-     * @param user The user.
-     *
-     * @param transferable The received transferable.
+     * Handles any received transferable for a user.
      */
     public static void handle(User user, TransferableObject transferable) {
         if (transferable instanceof ChatMessage) {

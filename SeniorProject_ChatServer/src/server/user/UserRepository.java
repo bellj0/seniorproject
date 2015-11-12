@@ -13,16 +13,12 @@ import shared.impl.UserList;
 public class UserRepository {
 
     /**
-     * A list holding the existing users.
+     * A list of existing users.
      */
     private static List<User> users = new LinkedList<>();
 
     /**
-     * Sends a message to all users.
-     *
-     * @param sender The sender of the message.
-     *
-     * @param message The message to display.
+     * A method used to send a message to all users on the server.
      */
     public static void messageAll(User sender, String message) {
         for (User user : users) {
@@ -32,18 +28,17 @@ public class UserRepository {
 
     /**
      * Sends a message to a user.
-     *
-     * @param sender The sender of the message.
-     *
-     * @param user The user to receive the message.
-     *
-     * @param message The message to display.
+     * This method is used by messageAll repetitively.
      */
     public static void message(User sender, User user, String message) {
         user.getConnection().send(new ChatMessage((sender == null ? "" : (sender.toString() + ": ")) + message));
     }
     
-    public static void updateUserList() {
+	/**
+	 * This method updates the userList that all of the users see throughout
+	 * their connection to the server.
+	 */
+	public static void updateUserList() {
         List<String> userList = new LinkedList<>();
         for(User user : users) {
             userList.add(user.toString());
@@ -54,11 +49,7 @@ public class UserRepository {
     }
 
     /**
-     * Retrieves whether a name is already in use or not.
-     *
-     * @param name The name.
-     *
-     * @return The result of the operation.
+     * Gets whether a name is already in use or not.
      */
     public static boolean nameTaken(String name) {
         for (User user : users) {
@@ -70,9 +61,7 @@ public class UserRepository {
     }
 
     /**
-     * Retrieves the list with the existing users.
-     *
-     * @return The list of existing users.
+     * Gets the list with the existing users.
      */
     public static List<User> getUsers() {
         return users;
