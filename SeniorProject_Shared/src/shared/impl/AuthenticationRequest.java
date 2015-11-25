@@ -7,6 +7,11 @@ import shared.TransferableObject;
  *
  * @author Stephen Asbury
  * @author Josh Bell
+ *
+ * This object is used to check the username requested by the user
+ * trying to connect to the server. The server will give a Authentication
+ * Response based on whether that username can be used.
+ *
  */
 public class AuthenticationRequest extends TransferableObject
 {

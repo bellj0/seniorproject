@@ -6,6 +6,10 @@ import java.io.Serializable;
  *
  * @author Stephen Asbury
  * @author Josh Bell
+ *
+ * Object that utilizes the transferable enumerated type,
+ * allowing to set/get/serialize an object.
+ *
  */
 public class TransferableObject implements Serializable
 {

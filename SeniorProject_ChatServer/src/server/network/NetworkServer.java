@@ -17,34 +17,28 @@ import io.netty.handler.codec.serialization.ObjectEncoder;
 
 /**
  *
- * @author Josh
+ * @author Josh & Stephen
  *
- * @info The network server handling connection requests.
+ * The network server handles connection requests.
  *
  */
 public class NetworkServer {
 
-    /**
-     * The boss even loop group.
-     */
-    private static EventLoopGroup bossGroup = new NioEventLoopGroup();
 
-    /**
-     * The worker event loop group.
-     */
+    private static EventLoopGroup bossGroup = new NioEventLoopGroup();
     private static EventLoopGroup workerGroup = new NioEventLoopGroup();
 
     /**
      * Attempts to connect the server to a specified port number.
-     *
-     * @param port The network port number.
-     *
-     * @throws InterruptedException Thrown when an interruption occurs in the
+     * InterruptedException can be Thrown when an interruption occurs in the
      * connection listener.
      */
     public void connect(int port) throws InterruptedException {
         ServerBootstrap bootstrap = new ServerBootstrap();
-        bootstrap.group(bossGroup, workerGroup);
+		
+		// setting the server-client between the two EventLoopGroups
+		// boss being the server, worker being clients
+        bootstrap.group(bossGroup, workerGroup); 
         bootstrap.channel(NioServerSocketChannel.class);
         bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
             @Override
@@ -55,14 +49,17 @@ public class NetworkServer {
             }
         });
         bootstrap.option(ChannelOption.SO_BACKLOG, 128);
-        bootstrap.childOption(ChannelOption.SO_KEEPALIVE, true);
+		
+		// keeps the server channel open unless told to dispose.
+        bootstrap.childOption(ChannelOption.SO_KEEPALIVE, true); 
 
-        ChannelFuture future = bootstrap.bind(port);
+        ChannelFuture future = bootstrap.bind(port); // port is set.
         future.sync();
         Channel channel = future.channel();
         channel.closeFuture();
         future.sync();
         System.out.println("Server bound to port " + port + ". Waiting for connections.");
+		// server is now open and taking connections.
         
     }
 

@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package server.user;
 
 import shared.connection.Connection;
@@ -16,7 +12,7 @@ public class User {
     /**
      * The username of the user.
      */
-    private final String username;
+    private String username;
 
     /**
      * The connection the user is using.
@@ -24,11 +20,8 @@ public class User {
     private final Connection connection;
 
     /**
-     * The constructor.
-     *
-     * @param connection The connection the user is on.
-     *
-     * @param username The username of the user.
+     * The constructor of a user, which contains the connection the user
+	 * is using to communicate over the network as well as the username.
      */
     public User(Connection connection, String username) {
         this.connection = connection;
@@ -47,11 +40,16 @@ public class User {
     /**
      * Retrieves the connection the user is using to communicate over the
      * network.
-     *
-     * @return The used connection.
      */
     public Connection getConnection() {
         return connection;
+    }
+	
+	/**
+	 * Used to adjust username if need be.
+	 */
+	public void setUsername(String username){
+        this.username = username;
     }
 
     @Override
