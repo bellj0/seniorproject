@@ -27,7 +27,7 @@ public class LoginHandler {
         AuthenticationRequest authentication = (AuthenticationRequest) transferable;
         
 		// used to see if the username requested is already in use.
-		Boolean nameInUse = false;
+        Boolean nameInUse = false;
         User user = new User(connection, authentication.getUsername());
         
         if (UserRepository.nameTaken(user.toString())) {

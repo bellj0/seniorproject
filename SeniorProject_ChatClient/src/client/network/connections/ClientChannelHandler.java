@@ -19,6 +19,11 @@ import shared.impl.UserList;
 public class ClientChannelHandler extends ChannelHandler
 {
     @Override
+    public void channelInactive(ChannelHandlerContext context) {
+        ConnectionHandler.disconnected();
+    }
+    
+    @Override
     public void channelActive(ChannelHandlerContext context) {
             super.channelActive(context);
             ConnectionHandler.connected(getConnection());

@@ -43,18 +43,18 @@ public class Controller {
             }
         }
         //Attempt server connection
+        ChatConfig config = new ChatConfig();
+        //Setup window location and host/port info
+        config.setup(host, port);
+        FrameHandler.launchFrame(config);
         connectToServer(host, port);
         
     }
     public static void connectToServer(String host, Integer port) {
-            ChatConfig config = new ChatConfig();
-            //Setup window location and host/port info
-            config.setup(host, port);
-            FrameHandler.launchFrame(config);
             try {
-                    new Thread(new NetworkClient(ChatConfig.getHost(), ChatConfig.getPort())).run();
+                new Thread(new NetworkClient(ChatConfig.getHost(), ChatConfig.getPort())).run();
             } catch (Exception e) {
-                    ConnectionHandler.disconnected();
+                ConnectionHandler.disconnected();
             }
 	}
 }

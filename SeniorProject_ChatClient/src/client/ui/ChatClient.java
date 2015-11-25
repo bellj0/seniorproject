@@ -122,10 +122,14 @@ public class ChatClient extends javax.swing.JFrame {
     }//GEN-LAST:event_messageTextFieldKeyPressed
 
     public void sendMessage() {
-        //Send a ChatMessage object to the server, which will send to all users
-        ConnectionHandler.getConnection().send(new ChatMessage(messageTextField.getText()));
-        //Clear message text field since user just sent that message
-        messageTextField.setText("");
+        //Make sure message is not empty string
+        if(!messageTextField.getText().equals(""))
+        {
+            //Send a ChatMessage object to the server, which will send to all users
+            ConnectionHandler.getConnection().send(new ChatMessage(messageTextField.getText()));
+            //Clear message text field since user just sent that message
+            messageTextField.setText("");
+        }
     }
     
     public void appendChatText(String text) {

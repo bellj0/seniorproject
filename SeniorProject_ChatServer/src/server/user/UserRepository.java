@@ -21,8 +21,97 @@ public class UserRepository {
      * A method used to send a message to all users on the server.
      */
     public static void messageAll(User sender, String message) {
-        for (User user : users) {
-            message(sender, user, message);
+        //Command from user
+        if(message.startsWith("/"))
+        {
+            if(sender.getOp())
+            {
+                if(message.contains("/op"))
+                {
+                    String [] split = message.split(" ");
+                    if(split.length == 2)
+                    {
+                        for(User u : UserRepository.getUsers())
+                        {
+                            if(u.getUsername().equals(split[1]))
+                            {
+                                if(!u.getOp())
+                                {
+                                    u.setOp(true);
+                                    message(null, sender, "User '"+u+"' opped.");
+                                    message(null, u, "User '"+sender+" opped you.");
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        message(null, sender, "No user entered.");
+                    }
+                    UserRepository.updateUserList();
+                }
+                else if(message.contains("/kick"))
+                {
+                    String [] split = message.split(" ");
+                    if(split.length == 2)
+                    {
+                        for(User u : UserRepository.getUsers())
+                        {
+                            if(u.getUsername().equals(split[1]))
+                            {
+                                if(u.getOp())
+                                {
+                                    message(null, sender, "Cannot kick another opped user.");
+                                }
+                                else
+                                {
+                                    u.logout();
+                                    u.getConnection().dispose();
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        message(null, sender, "No user entered.");
+                    }
+                }
+                else if(message.contains("/deop"))
+                {
+                    String [] split = message.split(" ");
+                    if(split.length == 2)
+                    {
+                        for(User u : UserRepository.getUsers())
+                        {
+                            if(u.getUsername().equals(split[1]))
+                            {
+                                if(u.getOp())
+                                {
+                                    u.setOp(false);
+                                    message(null, sender, "User '"+u+"' deoped.");
+                                    message(null, u, "User '"+sender+"' deopped you.");
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        message(null, sender, "No user entered.");
+                    }
+                    UserRepository.updateUserList();
+                }
+            }
+            else
+            {
+                message(null, sender, "Must be oped to use commands.");
+            }
+        }
+        else
+        {
+            if(!message.equals(""))
+                for (User user : users) {
+                    message(sender, user, message);
+                }
         }
     }
 
@@ -34,11 +123,11 @@ public class UserRepository {
         user.getConnection().send(new ChatMessage((sender == null ? "" : (sender.toString() + ": ")) + message));
     }
     
-	/**
-	 * This method updates the userList that all of the users see throughout
-	 * their connection to the server.
-	 */
-	public static void updateUserList() {
+    /**
+     * This method updates the userList that all of the users see throughout
+     * their connection to the server.
+     */
+    public static void updateUserList() {
         List<String> userList = new LinkedList<>();
         for(User user : users) {
             userList.add(user.toString());

@@ -19,13 +19,17 @@ public class User {
      */
     private final Connection connection;
 
+    private Boolean op = false;
+    
     /**
      * The constructor of a user, which contains the connection the user
 	 * is using to communicate over the network as well as the username.
      */
     public User(Connection connection, String username) {
         this.connection = connection;
-        this.username = username;
+        setUsername(username);
+        if(UserRepository.getUsers().isEmpty())
+            this.op = true;
     }
 
     /**
@@ -45,16 +49,35 @@ public class User {
         return connection;
     }
 	
-	/**
-	 * Used to adjust username if need be.
-	 */
-	public void setUsername(String username){
-        this.username = username;
+    public String getUsername()
+    {
+        return username;
+    }
+    
+    /**
+     * Used to adjust username if need be.
+     */
+    public final void setUsername(String username){
+        username = username.replace("(OP)", "");
+        this.username = username.trim();
     }
 
+    public void setOp(Boolean op)
+    {
+        this.op = op;
+    }
+    
+    public Boolean getOp()
+    {
+        return op;
+    }
+    
     @Override
     public String toString() {
-        return username;
+        if(op)
+            return username + " (OP)";
+        else
+            return username;
     }
 
 }

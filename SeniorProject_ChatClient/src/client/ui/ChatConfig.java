@@ -126,7 +126,7 @@ public class ChatConfig extends javax.swing.JFrame implements ServerStatus {
 
     private void requestLogin() {
         if (!isValidUsername(getUsername()))
-                JOptionPane.showMessageDialog(this, "Username cannot be null.", "Chat Client", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Username cannot be null or contain (OP).", "Chat Client", JOptionPane.WARNING_MESSAGE);
         else {
             toggleCredentials(false);
             ConnectionHandler.getConnection().send(new AuthenticationRequest(getUsername()));
@@ -134,21 +134,21 @@ public class ChatConfig extends javax.swing.JFrame implements ServerStatus {
     }
     
     public void login(String response) {
-		if (response != null) {
-			JOptionPane.showMessageDialog(this, response, "Chat Client", JOptionPane.WARNING_MESSAGE);
-                        toggleCredentials(true);
-		} else {
-                    ChatClient client = new ChatClient();
-                    client.setup(getUsername());
-                    FrameHandler.launchFrame(client);
-                    dispose();
-                }
-	}
+        if (response != null) {
+            JOptionPane.showMessageDialog(this, response, "Chat Client", JOptionPane.WARNING_MESSAGE);
+            toggleCredentials(true);
+        } else {
+            ChatClient client = new ChatClient();
+            client.setup(getUsername());
+            FrameHandler.launchFrame(client);
+            dispose();
+        }
+    }
     
     private void toggleCredentials(boolean enabled) {
-		usernameTextField.setEnabled(enabled);
-		connectButton.setEnabled(enabled);
-	}
+        usernameTextField.setEnabled(enabled);
+        connectButton.setEnabled(enabled);
+    }
     
     public static Boolean isValidServer(String server) {
         return !server.isEmpty();
@@ -159,7 +159,7 @@ public class ChatConfig extends javax.swing.JFrame implements ServerStatus {
     }
     
     public static Boolean isValidUsername(String username) {
-        return !username.isEmpty();
+        return !username.isEmpty() && !username.contains("(OP)");
     }
     
     private void setLookAndFeel() {

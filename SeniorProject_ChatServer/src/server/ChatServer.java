@@ -2,6 +2,8 @@ package server;
 
 import java.util.Scanner;
 import server.network.NetworkServer;
+import server.user.User;
+import server.user.UserRepository;
 
 /**
  *
@@ -38,8 +40,78 @@ public class ChatServer {
 		// once a valid port number is entered for the server to run on,
 		// a connection is made using that port number.
         new NetworkServer().connect(port);
-
-       
+        String next;
+        while(true)
+        {
+            next = sc.nextLine();
+            if(next.equals("/exit"))
+                System.exit(0);
+            else if(next.contains("/op"))
+            {
+                String [] split = next.split(" ");
+                if(split.length == 2)
+                {
+                    for(User u : UserRepository.getUsers())
+                    {
+                        if(u.getUsername().equals(split[1]))
+                        {
+                            u.setOp(true);
+                            System.out.println("User '"+u+"' opped.");
+                            UserRepository.message(null, u, "Server opped you.");
+                        }
+                    }
+                }
+                else
+                {
+                    System.out.println("No user entered.");
+                }
+                UserRepository.updateUserList();
+            }
+            else if(next.contains("/kick"))
+            {
+                String [] split = next.split(" ");
+                if(split.length == 2)
+                {
+                    for(User u : UserRepository.getUsers())
+                    {
+                        if(u.getUsername().equals(split[1]))
+                        {
+                            u.logout();
+                            u.getConnection().dispose();
+                            System.out.println("User '"+u+"' kicked.");
+                        }
+                    }
+                }
+                else
+                {
+                    System.out.println("No user entered.");
+                }
+            }
+            else if(next.contains("/deop"))
+            {
+                String [] split = next.split(" ");
+                if(split.length == 2)
+                {
+                    for(User u : UserRepository.getUsers())
+                    {
+                        if(u.getUsername().equals(split[1]))
+                        {
+                            if(u.getOp())
+                            {
+                                u.setOp(false);
+                                System.out.println("User '"+u+"' deopped.");
+                                UserRepository.message(null, u, "Server deopped you.");
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    System.out.println("No user entered.");
+                }
+                UserRepository.updateUserList();
+            }
+        }
     }
 
 }
