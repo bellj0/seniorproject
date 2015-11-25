@@ -55,18 +55,26 @@ public class ChatConfig extends javax.swing.JFrame implements ServerStatus {
         setName("chatConfig"); // NOI18N
         setResizable(false);
 
+        usernameTextField.setEnabled(false);
+        usernameTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                usernameTextFieldKeyPressed(evt);
+            }
+        });
+
         serverLabel.setText("Server");
 
         usernameLabel.setText("Username");
 
         connectButton.setText("Connect");
+        connectButton.setEnabled(false);
         connectButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 connectButtonActionPerformed(evt);
             }
         });
 
-        statusLabel.setText("Status");
+        statusLabel.setText("Offline");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -109,6 +117,12 @@ public class ChatConfig extends javax.swing.JFrame implements ServerStatus {
     private void connectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectButtonActionPerformed
         requestLogin();
     }//GEN-LAST:event_connectButtonActionPerformed
+
+    private void usernameTextFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_usernameTextFieldKeyPressed
+        //Shortcut enter to login
+        if(evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER)
+            requestLogin();
+    }//GEN-LAST:event_usernameTextFieldKeyPressed
 
     private void requestLogin() {
         if (!isValidUsername(getUsername()))

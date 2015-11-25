@@ -6,7 +6,6 @@
 package client.ui;
 
 import client.network.connections.ConnectionHandler;
-import java.awt.event.WindowEvent;
 import java.util.List;
 import shared.impl.ChatMessage;
 
@@ -132,6 +131,7 @@ public class ChatClient extends javax.swing.JFrame {
     public void appendChatText(String text) {
         //Add text to chat area for all clients
         chatTextArea.append(text+"\n");
+        chatTextArea.setCaretPosition(chatTextArea.getText().length());
     }
     
     public void updateUserList(List<String> users) {
