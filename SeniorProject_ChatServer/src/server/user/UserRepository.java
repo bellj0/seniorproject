@@ -100,6 +100,14 @@ public class UserRepository {
                     }
                     UserRepository.updateUserList();
                 }
+                else if(message.contentEquals("/?") || message.contentEquals("/help"))
+                {
+                    message(null, sender, "Valid commands: /op, /kick, /deop");
+                }
+                else
+                {
+                    message(null, sender, "Invalid command, please type /? or /help for a list of commands.");
+                }
             }
             else
             {
@@ -142,7 +150,7 @@ public class UserRepository {
      */
     public static boolean nameTaken(String name) {
         for (User user : users) {
-            if (user.toString().equalsIgnoreCase(name)) {
+            if (user.getUsername().equalsIgnoreCase(name)) {
                 return true;
             }
         }

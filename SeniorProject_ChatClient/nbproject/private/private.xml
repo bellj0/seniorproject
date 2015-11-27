@@ -2,6 +2,15 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/Stephen/Repos/seniorproject/SeniorProject_ChatClient/src/client/network/connections/ConnectionHandler.java</file>
+            <file>file:/C:/Users/Stephen/Repos/seniorproject/SeniorProject_ChatClient/src/client/network/NetworkClient.java</file>
+            <file>file:/C:/Users/Stephen/Repos/seniorproject/SeniorProject_ChatClient/src/client/Controller/Controller.java</file>
+            <file>file:/C:/Users/Stephen/Repos/seniorproject/SeniorProject_ChatClient/src/client/ui/FrameHandler.java</file>
+            <file>file:/C:/Users/Stephen/Repos/seniorproject/SeniorProject_ChatClient/src/client/ui/ServerStatus.java</file>
+            <file>file:/C:/Users/Stephen/Repos/seniorproject/SeniorProject_ChatClient/src/client/ui/ChatConfig.java</file>
+            <file>file:/C:/Users/Stephen/Repos/seniorproject/SeniorProject_ChatClient/src/client/ui/ChatClient.java</file>
+            <file>file:/C:/Users/Stephen/Repos/seniorproject/SeniorProject_ChatClient/src/client/network/connections/ClientChannelHandler.java</file>
+        </group>
     </open-files>
 </project-private>

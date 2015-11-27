@@ -1,5 +1,6 @@
 package server;
 
+import java.util.List;
 import java.util.Scanner;
 import server.network.NetworkServer;
 import server.user.User;
@@ -7,7 +8,8 @@ import server.user.UserRepository;
 
 /**
  *
- * @author Josh & Stephen
+ * @author Stephen Asbury
+ * @author Josh Bell
  *
  * This class starts the ChatServer used by the clients. It requires a port
  * number between 1 and 65535.
@@ -24,7 +26,7 @@ public class ChatServer {
 
         while(port < 0 || port > 65535)
         {
-			// attempts to parse the port given by the user into an Integer
+            // attempts to parse the port given by the user into an Integer
             try {
                 port = Integer.parseInt(sc.nextLine());
             } catch (Exception e) {
@@ -32,13 +34,13 @@ public class ChatServer {
             }
             if(port > 65535 || port < 0)
             {
-				// if the port number given is not within the correct range
-				// the server asks them for a port # again
+                // if the port number given is not within the correct range
+                // the server asks them for a port # again
                 System.out.println("Please enter a port between 1-65535: ");
             }
         }
-		// once a valid port number is entered for the server to run on,
-		// a connection is made using that port number.
+        // once a valid port number is entered for the server to run on,
+        // a connection is made using that port number.
         new NetworkServer().connect(port);
         String next;
         while(true)
@@ -110,6 +112,40 @@ public class ChatServer {
                     System.out.println("No user entered.");
                 }
                 UserRepository.updateUserList();
+            }
+            else if(next.equals("/users"))
+            {
+                List<User> users = UserRepository.getUsers();
+                Integer size = users.size();
+                if(size > 0)
+                {
+                    Integer currentUser = 0;
+                    System.out.print("Users: ");
+                    for(User u : UserRepository.getUsers())
+                    {
+                        if(currentUser + 1 == size)
+                        {
+                            System.out.println(u);
+                        }
+                        else
+                        {
+                            System.out.print(u+", ");
+                        }
+                        currentUser++;
+                    }
+                }
+                else
+                {
+                    System.out.println("No users in chat.");
+                }
+            }
+            else if(next.equals("/?") || next.equals("/help"))
+            {
+                System.out.println("Valid commands: /exit, /op, /kick, /deop, /users");
+            }
+            else
+            {
+                System.out.println("Invalid command, please type /? or /help for a list of commands.");
             }
         }
     }
